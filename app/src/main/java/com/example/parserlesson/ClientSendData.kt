@@ -11,14 +11,14 @@ class ClientSendData {
     var wifiVersion = ""
     var macAddress = ""
     var bandSwitch2_4G = ""
-    var SSID_2_4G_Length = 0            //int
+    var SSID_2_4G_Length = ""
     var SSID_2_4G = ""
-    var Password_2_4G_Length = 0
+    var Password_2_4G_Length = ""
     var Password_2_4G = ""
     var bandSwitch_5G = ""
-    var SSID_5G_Length = 1              //int
+    var SSID_5G_Length = ""
     var SSID_5G = ""                   //由客人輸人的值決定
-    var Password_5G_Length = 0
+    var Password_5G_Length = ""
     var Password_5G = ""
     var EAP_Method = ""
     var EAP_Inner_Method = ""
@@ -53,7 +53,15 @@ class ClientSendData {
         bandSwitch2_4G = "01"
         sendDataToAdapter.add(bandSwitch2_4G)           //Band Switch 2.4G , Enable
 
-        sendDataToAdapter.add("0C")            //SSID 2.4G Length
+        SSID_2_4G = "SportsArt_10"              // SSID_5G_Length
+        if (SSID_2_4G.length <= 9) {
+            SSID_2_4G_Length = "0" + SSID_2_4G.length
+        } else
+            SSID_2_4G_Length = SSID_2_4G.length.toString(16)
+        Log.d(TAG, "SSID_2.4G length: ${SSID_2_4G_Length} ")
+        sendDataToAdapter.add(SSID_2_4G_Length)      //SSID 2.4G Length
+
+
         // SSID_2.4G
         SSID_2_4G = "SportsArt_10"
         for ((i, v) in SSID_2_4G.withIndex()) {
@@ -62,7 +70,13 @@ class ClientSendData {
             //                 Log.d(TAG, "SSID_2_4G[i]: ${SSID_2_4G[i].toInt().toString(16)}")
         }
 
-
+        Password_2_4G = "sportsart063840888"              // Password_2_4G_Length
+        if (Password_2_4G.length <= 9) {
+            Password_2_4G_Length = "0" + Password_2_4G.length
+        } else
+            Password_2_4G_Length  = Password_2_4G.length.toString(16)
+        Log.d(TAG, "Password_2_4G: ${Password_2_4G_Length } ")
+        sendDataToAdapter.add(Password_2_4G_Length)      //SSID 2.4G Length
 
         Password_2_4G = "sportsart063840888"                                // Password_2.4G
         for ((i, v) in Password_2_4G.withIndex()) {
@@ -74,14 +88,30 @@ class ClientSendData {
         bandSwitch_5G = "01"
         sendDataToAdapter.add(bandSwitch_5G)           //Band Switch 5G , Enable
 
+        SSID_5G = "SportsArt_10_5G"              // SSID_5G_Length
+        if (SSID_5G.length <= 9) {
+            SSID_5G_Length = "0" + SSID_5G.length
+        } else
+            SSID_5G_Length = SSID_5G.length.toString(16)
+        Log.d(TAG, "SSID_5G length: ${SSID_5G_Length} ")
+        sendDataToAdapter.add(SSID_5G_Length)
+
         //     SSID_5G = editTextSSID_5G.text.toString            // SSID_5G
         SSID_5G = "SportsArt_10_5G"
-
         for ((i, v) in SSID_5G.withIndex()) {
             //ascii 處理 (因為要送Ascii Code)
             sendDataToAdapter.add(SSID_5G[i].toInt().toString(16))
             //          Log.d(TAG, "SSID_5G[i]: ${SSID_5G[i].toInt().toString(16)}")
         }
+
+        Password_5G = "00000000"            // Password_2_4G_Length
+        if (Password_5G.length <= 9) {
+            Password_5G_Length = "0" + Password_5G.length
+        } else
+            Password_5G_Length  = Password_5G.length.toString(16)
+        Log.d(TAG, "Password_5G: ${Password_5G_Length } ")
+        sendDataToAdapter.add(Password_5G_Length)
+
 
 //      Password_5G = editPassword_5G.text.toString
         Password_5G = "00000000"
@@ -101,7 +131,13 @@ class ClientSendData {
         sendDataToAdapter.add(EAP_Inner_Method)
 
         //eap user id length
-        EAP_User_ID_Length = "01"
+
+        EAP_User_ID = "SportsArt_EAP"            // EAP user id
+        if (EAP_User_ID.length <= 9) {
+            EAP_User_ID_Length = "0" + EAP_User_ID.length
+        } else
+            EAP_User_ID_Length  = EAP_User_ID.length.toString(16)
+        Log.d(TAG, "EAP_User_ID_Length: ${EAP_User_ID_Length } ")
         sendDataToAdapter.add(EAP_User_ID_Length)
 
         // eap user id
@@ -111,8 +147,16 @@ class ClientSendData {
             sendDataToAdapter.add(EAP_User_ID[i].toInt().toString(16))
             Log.d(TAG, "EAP_User_ID: ${EAP_User_ID[i].toInt().toString(16)}")
         }
-        //eap user password length
-        EAP_User_Password_Length = "02"
+
+
+                                                       //eap user password length 長度
+        EAP_User_Password = "000000001234567890"
+        if (EAP_User_Password.length <= 9) {
+            EAP_User_Password_Length = "0" + EAP_User_Password.length
+        } else
+            EAP_User_Password_Length = EAP_User_Password.length.toString(16)
+        Log.d(TAG, "eap user password length: ${EAP_User_Password_Length} ")
+
         sendDataToAdapter.add(EAP_User_Password_Length)
 
         //eap user password
@@ -124,11 +168,55 @@ class ClientSendData {
         }
 //SGIP
         SG_IP = "192.168.0.14"     //直接送 C0.A8.00.0E
+        //第1個點.
+        var index0 = SG_IP.indexOf(".")
+ //       Log.d(TAG, "inedx0: ${index0}")
+        var index0v = SG_IP.subSequence(0,index0).toString().toInt().toString(16)
+         Log.d(TAG, "index0v: $index0v")    //192 -> c0
+        when(index0v)
+        {
+            in "0".."9","a","b","c","d","e","f" -> { index0v = "0" + index0v  }
+            else -> {}
+        }
 
-        sendDataToAdapter.add("C0")
-        sendDataToAdapter.add("A8")
-        sendDataToAdapter.add("00")
-        sendDataToAdapter.add("0E")
+//第2個點.
+        var index1 = SG_IP.indexOf(".",index0+1)
+ //       Log.d(TAG, "inedx1: ${index1}")
+        var index1v = SG_IP.subSequence(index0+1,index1).toString().toInt().toString(16)
+        Log.d(TAG, "index1v: $index1v")
+        when(index1v)
+        {
+            in "0".."9","a","b","c","d","e","f" -> { index1v = "0" + index1v  }
+            else -> {}
+        }
+
+//第3個點.
+        var index2 = SG_IP.indexOf(".",index1+1)
+ //       Log.d(TAG, "inedx2: ${index2}")
+        var index2v = SG_IP.subSequence(index1+1,index2).toString().toInt().toString(16)
+        Log.d(TAG, "index2v: $index2v")
+        when(index2v)
+        {
+            in "0".."9","a","b","c","d","e","f"-> { index2v = "0" + index2v  }
+            else -> {}
+        }
+
+// 最後值
+        var index3 = SG_IP.length
+  //      Log.d(TAG, "inedx3: ${index3}")
+        var index3v = SG_IP.subSequence(index2+1,index3).toString().toInt().toString(16)
+        Log.d(TAG, "index3v: $index3v")
+        when(index3v)
+        {
+            in "0".."9","a","b","c","d","e","f" -> { index3v = "0" + index3v  }
+            else -> {}
+        }
+
+
+        sendDataToAdapter.add(index0v)
+        sendDataToAdapter.add(index1v)
+        sendDataToAdapter.add(index2v)
+        sendDataToAdapter.add(index3v)
 
         //Serial number
         // 0x31 0x32 0x33 0x34 0x35 0x36 0x37(1234567)
